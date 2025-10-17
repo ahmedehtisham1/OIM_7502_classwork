@@ -6,16 +6,16 @@ class Sp500Spider(scrapy.Spider):
     start_urls = ["https://www.slickcharts.com/sp500/performance"]
 
     def parse(self, response):
-        # table rows
+        
         rows = response.xpath('//table[contains(@class,"table")]/tbody/tr')
         for row in rows:
             number  = row.xpath('./td[1]/text()').get()
             company = row.xpath('./td[2]//a/text()').get()
             symbol  = row.xpath('./td[3]//a/text()').get()
-            # YTD Return: 4th column; normalize to remove non-breaking spaces
+            # YTD Return: 4th column normalize 
             ytd     = row.xpath('normalize-space(./td[4])').get()
 
-            # optional: simple strip in case of None
+    
             yield {
                 "number": (number or "").strip(),
                 "company": (company or "").strip(),
